@@ -1,0 +1,4 @@
+
+Huffman coding is a lossless compression algorithm.
+This file is used to test our offline compressor.
+Huffman coding can reduce the number of bits needed.

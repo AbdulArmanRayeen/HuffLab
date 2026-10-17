@@ -1,0 +1,252 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b1020">
+    <title>HuffLab — Offline File Compressor</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="/app.js" defer></script>
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar">
+        <a class="brand" href="/" aria-label="HuffLab home">
+            <span class="brand-mark">H</span>
+            <span>Huff<span class="brand-accent">Lab</span>
+                <small>OFFLINE FILE TOOLS</small>
+            </span>
+        </a>
+
+        <div class="side-label">WORKSPACE</div>
+        <div class="side-item active">
+            <span class="side-icon">▦</span>
+            File compressor
+        </div>
+        <div class="side-note">
+            <span class="status-dot"></span>
+            Local engine ready
+        </div>
+
+        <div class="sidebar-bottom">
+            <div class="privacy-icon">◇</div>
+            <strong>Your files stay local</strong>
+            <p>Files are processed by your Java server on this computer.</p>
+            <div class="offline-pill"><span></span> NO CLOUD REQUIRED</div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <div class="eyebrow">FILE UTILITIES / HUFFMAN CODING</div>
+                <h1>File compressor</h1>
+                <p class="subtitle">Compress, restore, and inspect your files.</p>
+            </div>
+            <div class="top-status">
+                <span class="status-dot"></span>
+                <span>Local server</span>
+            </div>
+        </header>
+
+        <section class="intro-row">
+            <div>
+                <h2>What would you like to do?</h2>
+                <p>Choose an operation, then select a file to get started.</p>
+            </div>
+            <div class="engine-badge">
+                <span class="engine-symbol">⌘</span>
+                <span>Huffman engine <strong>Java</strong></span>
+            </div>
+        </section>
+
+        <section class="mode-grid" aria-label="Choose operation">
+            <button class="mode-card selected" id="compressMode"
+                    type="button" aria-pressed="true">
+                <span class="mode-icon compress-icon">↘</span>
+                <span class="mode-copy">
+                    <strong>Compress a file</strong>
+                    <small>Convert a file into the .huff format</small>
+                </span>
+                <span class="mode-radio"></span>
+            </button>
+
+            <button class="mode-card" id="decompressMode"
+                    type="button" aria-pressed="false">
+                <span class="mode-icon decompress-icon">↗</span>
+                <span class="mode-copy">
+                    <strong>Decompress a file</strong>
+                    <small>Restore a previously compressed .huff file</small>
+                </span>
+                <span class="mode-radio"></span>
+            </button>
+        </section>
+
+        <section class="workspace">
+            <div class="section-heading">
+                <div>
+                    <h2 id="uploadHeading">Select a file to compress</h2>
+                    <p id="uploadDescription">Your original file will not be modified.</p>
+                </div>
+                <span class="step-label">STEP 01</span>
+            </div>
+
+            <div class="drop-zone" id="dropZone" tabindex="0"
+                 role="button" aria-label="Choose a file">
+                <input id="fileInput" type="file" hidden>
+                <div class="upload-illustration">
+                    <div class="upload-orbit"></div>
+                    <div class="upload-file">↑</div>
+                </div>
+                <h3>Drop your file here</h3>
+                <p>or <span class="browse-link">browse your computer</span></p>
+                <div class="file-limit">MAXIMUM REQUEST SIZE: 50 MB</div>
+            </div>
+
+            <div class="selected-file hidden" id="selectedFile">
+                <div class="file-icon" id="fileIcon">FILE</div>
+                <div class="selected-file-info">
+                    <strong id="fileName">sample.txt</strong>
+                    <small id="fileDetails">0 bytes</small>
+                </div>
+                <button class="icon-button" id="removeFile"
+                        type="button" aria-label="Remove selected file">×</button>
+            </div>
+
+            <div class="actions-row">
+                <div class="security-note">
+                    <span>⌑</span>
+                    Processed locally on your computer
+                </div>
+                <button class="primary-button" id="processButton"
+                        type="button" disabled>
+                    <span id="processButtonText">Compress file</span>
+                    <span aria-hidden="true">→</span>
+                </button>
+            </div>
+
+            <div class="error-banner hidden" id="errorBanner" role="alert">
+                <span>!</span>
+                <span id="errorMessage">Something went wrong.</span>
+            </div>
+
+            <div class="progress-panel hidden" id="progressPanel"
+                 role="status" aria-live="polite">
+                <div class="progress-spinner"></div>
+                <div class="progress-copy">
+                    <strong id="progressTitle">Processing your file...</strong>
+                    <span id="progressDescription">The local engine is working.</span>
+                </div>
+                <span class="progress-tag">WORKING</span>
+            </div>
+        </section>
+
+        <section class="results-section hidden" id="resultsSection"
+                 aria-live="polite">
+            <div class="results-heading">
+                <div>
+                    <div class="eyebrow">PROCESSING COMPLETE</div>
+                    <h2>Your results</h2>
+                </div>
+                <span class="success-badge">
+                    <span>✓</span> Success
+                </span>
+            </div>
+
+            <div class="stats-grid">
+                <article class="stat-card">
+                    <div class="stat-label">ORIGINAL SIZE</div>
+                    <div class="stat-value" id="originalSize">—</div>
+                    <div class="stat-foot">Input file</div>
+                </article>
+                <article class="stat-card">
+                    <div class="stat-label">OUTPUT SIZE</div>
+                    <div class="stat-value" id="outputSize">—</div>
+                    <div class="stat-foot">Generated file</div>
+                </article>
+                <article class="stat-card highlight-card">
+                    <div class="stat-label" id="savingLabel">SPACE SAVED</div>
+                    <div class="stat-value" id="savingValue">—</div>
+                    <div class="stat-foot" id="savingFoot">Compared with original</div>
+                </article>
+            </div>
+
+            <article class="comparison-card" id="comparisonCard">
+                <div class="comparison-heading">
+                    <strong>File size comparison</strong>
+                    <span id="comparisonCaption">Original vs. compressed</span>
+                </div>
+                <div class="bar-row">
+                    <span>Original</span>
+                    <div class="bar-track">
+                        <div class="bar-fill original-bar" id="originalBar"></div>
+                    </div>
+                    <strong id="originalBarLabel">—</strong>
+                </div>
+                <div class="bar-row">
+                    <span>Output</span>
+                    <div class="bar-track">
+                        <div class="bar-fill output-bar" id="outputBar"></div>
+                    </div>
+                    <strong id="outputBarLabel">—</strong>
+                </div>
+                <p class="comparison-note" id="comparisonNote"></p>
+            </article>
+
+            <div class="download-card">
+                <div class="download-file-icon">↓</div>
+                <div class="download-info">
+                    <strong id="outputFileName">compressed.huff</strong>
+                    <span id="downloadDescription">Your file is ready to save.</span>
+                </div>
+                <button class="download-button" id="downloadButton" type="button">
+                    Download <span>↓</span>
+                </button>
+            </div>
+
+            <div class="next-action-row">
+                <p>Need to process another file?</p>
+                <button class="text-button" id="resetButton" type="button">
+                    Start a new operation ↗
+                </button>
+            </div>
+        </section>
+
+
+        <section class="workspace" id="huffmanVisualizerSection" style="margin-top:24px;">
+            <div class="section-heading">
+                <div>
+                    <h2>Huffman Tree Visualizer</h2>
+                    <p>Build a tree from the selected file's byte frequencies and explore the greedy merges.</p>
+                </div>
+                <span class="step-label">DSA LAB</span>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;">
+                <button class="primary-button" id="visualizeTreeButton" type="button" disabled>
+                    Build Huffman Tree →
+                </button>
+                <span id="treeSummary" style="color:var(--muted, #9aa4b2);font-size:.9rem;">Select a file in Compress mode to begin.</span>
+            </div>
+            <div id="treeStats" class="stats-grid hidden"></div>
+            <div id="treeError" class="error-banner hidden" role="alert" style="margin-bottom:12px;"></div>
+            <div id="treeVisualization" class="hidden" style="border:1px solid var(--border, #263247);border-radius:14px;padding:12px;overflow:auto;background:var(--card, #0d1425);">
+                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px;">
+                    <button class="text-button" id="treePrevButton" type="button">← Previous merge</button>
+                    <button class="text-button" id="treeNextButton" type="button">Next merge →</button>
+                    <button class="text-button" id="treeShowFinalButton" type="button">Show final tree</button>
+                    <span id="treeStepLabel" style="margin-left:auto;font-size:.9rem;color:var(--muted, #9aa4b2);">Step 0</span>
+                </div>
+                <div id="treeSvgContainer" style="min-width:600px;"></div>
+                <p id="treeExplanation" style="font-size:.9rem;color:var(--muted, #9aa4b2);margin:12px 0 4px;"></p>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <span>HuffLab <span class="footer-dot">•</span> Java + Huffman coding</span>
+            <span>Designed for offline use</span>
+        </footer>
+    </main>
+</div>
+</body>
+</html>
